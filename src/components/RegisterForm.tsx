@@ -11,6 +11,7 @@ import Field from "@/components/Field";
 import DateTimeInput from "@/components/ui/DateTimeInput";
 import Button from "@/components/ui/Button";
 import Spinner from "@/components/ui/Spinner";
+import RadioGroup from "./RadioGroup";
 
 const schema = z.object({
   fullName: z
@@ -19,18 +20,27 @@ const schema = z.object({
     .regex(/\w+\s\w+/, "Must be at least two words"),
   email: z.string().email(),
   birthDate: z.date().or(z.string().min(1, "Date of Birth is required")),
+  eventChannel: z.string().min(1, "The field is required"),
 });
 
 type RegisterForEventFormValues = z.infer<typeof schema>;
 type RegisterFormProps = Omit<ComponentProps<"form">, "onSubmit">;
 
+const radioOptions = [
+  { label: "Social media", value: "social-media" },
+  { label: "Friends", value: "friends" },
+  { label: "Found myself", value: "found-myself" },
+];
+
 export default function RegisterForm({ className, ...props }: RegisterFormProps) {
   const [isClient, setIsClient] = useState(false);
+
   const form = useForm<RegisterForEventFormValues>({
     defaultValues: {
       fullName: "",
       email: "",
       birthDate: "",
+      eventChannel: "",
     },
     resolver: zodResolver(schema),
   });
@@ -77,6 +87,12 @@ export default function RegisterForm({ className, ...props }: RegisterFormProps)
             label="Date of birth"
             placeholder="Select from calendar..."
             component={DateTimeInput}
+          />
+
+          <RadioGroup
+            label="Where did you here about this event?"
+            name="fruit"
+            options={radioOptions}
           />
 
           <Button as="button" variant="secondary" type="submit" className="rounded-md text-white">

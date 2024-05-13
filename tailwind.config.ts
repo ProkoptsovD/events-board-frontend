@@ -28,6 +28,9 @@ const config: Config = {
         alt: {
           100: "#4539B4",
         },
+        choice: {
+          100: "#1F9D55",
+        },
       },
       rotate: {
         "30": "30deg",
