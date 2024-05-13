@@ -26,6 +26,7 @@ function Input(
   const inputElement = (
     <input
       ref={ref}
+      id={name}
       name={name}
       className="py-2 px-3 border-gray-300 border rounded-md focus-within:outline-accent-100 text-[14px] input"
       {...restProps}
