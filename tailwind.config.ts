@@ -4,6 +4,7 @@ const config: Config = {
   content: [
     "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/features/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
@@ -23,6 +24,9 @@ const config: Config = {
         accent: {
           100: "#FFE047",
           200: "#EBCC33",
+        },
+        alt: {
+          100: "#4539B4",
         },
       },
       rotate: {

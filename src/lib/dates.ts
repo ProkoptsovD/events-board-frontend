@@ -12,7 +12,7 @@ export const formatDate = (date: Date | string | number, options?: FormatDateTim
   const parsed = dayjs(date, format, locale);
 
   if (!parsed.isValid()) {
-    return "no date provided" as string;
+    return "";
   }
 
   return parsed.format(format);

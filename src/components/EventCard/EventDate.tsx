@@ -10,5 +10,7 @@ type EventDateProps = {
 export default function EventDate({ date, className, formatter = formatDate }: EventDateProps) {
   const formattedDate = formatter(date);
 
-  return <time className={cn("break-words", className)}>{formattedDate}</time>;
+  return (
+    <time className={cn("break-words text-alt-100 font-semibold", className)}>{formattedDate}</time>
+  );
 }

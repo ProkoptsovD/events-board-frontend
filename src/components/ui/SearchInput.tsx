@@ -6,12 +6,12 @@ type SearchInputProps = InputProps;
 
 export default function SearchInput({ className, ...props }: SearchInputProps) {
   return (
-    <div className={cn("flex flex-row", className)}>
+    <span className={cn("flex flex-row", className)}>
       <Input className="w-full [&_.input]:h-full" {...props} />
 
       <Button as="button" variant="secondary" className="relative -left-[4px] rounded-r-md">
         Search
       </Button>
-    </div>
+    </span>
   );
 }

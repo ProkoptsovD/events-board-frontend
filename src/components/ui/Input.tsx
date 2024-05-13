@@ -1,15 +1,10 @@
 import { ComponentProps, ForwardedRef, forwardRef, ReactNode } from "react";
 import cn from "classnames";
-import { isString } from "@/lib/type.guards";
-import dynamic from "next/dynamic";
-
-const InputErrorMessage = dynamic(() => import("@/components/ui/InputErrorMessage"));
 
 export type InputProps = {
   icon?: ReactNode;
   iconPosition?: "leading" | "trailing";
   label?: string;
-  errorMessage?: ReactNode;
   flow?: "row" | "col";
 } & ComponentProps<"input">;
 
@@ -19,33 +14,27 @@ function Input(
     icon,
     iconPosition = "leading",
     className,
-    errorMessage,
     flow = "col",
+    name,
     ...restProps
   }: InputProps,
   ref: ForwardedRef<HTMLInputElement>
 ) {
   const hasIcon = !!icon;
-  const isStringMessage = isString(errorMessage);
   const isLeadingPosition = iconPosition === "leading";
-
-  const errorMessageElement = isStringMessage ? (
-    <InputErrorMessage message={errorMessage} className="error-message" />
-  ) : (
-    errorMessage
-  );
 
   const inputElement = (
     <input
       ref={ref}
+      name={name}
       className="py-2 px-3 border-gray-300 border rounded-md focus-within:outline-accent-100 text-[14px] input"
       {...restProps}
     />
   );
 
   return (
-    <label aria-label={label} className={cn(`relative flex flex-${flow}`, className)}>
-      {!!label && <span className="label">{label}</span>}
+    <div aria-label={label} className={cn(`flex flex-${flow}`, className)}>
+      <label htmlFor={name}>{label}</label>
 
       {!hasIcon && inputElement}
 
@@ -63,9 +52,7 @@ function Input(
           {!isLeadingPosition && icon}
         </span>
       )}
-
-      {!!errorMessage && errorMessageElement}
-    </label>
+    </div>
   );
 }
 
