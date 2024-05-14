@@ -1,4 +1,4 @@
-import RegisterForm from "@/components/RegisterForm";
+import RegisterToEventForm from "@/components/forms/RegisterToEventForm";
 import Header from "@/components/ui/Header";
 import Logo from "@/components/ui/Logo";
 import { formatCurrency } from "@/lib/currency";
@@ -43,7 +43,7 @@ export default async function Page() {
         </p>
       </div>
 
-      <RegisterForm className="col-start-6 col-span-full row-span-full" />
+      <RegisterToEventForm className="col-start-6 col-span-full row-span-full" />
     </div>
   );
 }

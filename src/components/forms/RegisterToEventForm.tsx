@@ -3,15 +3,17 @@
 import cn from "classnames";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { ComponentProps, useEffect, useState } from "react";
+import { ComponentProps } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 
-import Input from "@/components/ui/Input";
+import { EVENTS_LEAD_CHANEL_OPTIONS } from "@/lib/const";
+
 import Field from "@/components/Field";
-import DateTimeInput from "@/components/ui/DateTimeInput";
+import Input from "@/components/ui/Input";
 import Button from "@/components/ui/Button";
 import Spinner from "@/components/ui/Spinner";
-import RadioGroup from "./RadioGroup";
+import RadioGroup from "@/components/RadioGroup";
+import DateTimeInput from "@/components/ui/DateTimeInput";
 
 const schema = z.object({
   fullName: z
@@ -26,15 +28,7 @@ const schema = z.object({
 type RegisterForEventFormValues = z.infer<typeof schema>;
 type RegisterFormProps = Omit<ComponentProps<"form">, "onSubmit">;
 
-const radioOptions = [
-  { label: "Social media", value: "social-media" },
-  { label: "Friends", value: "friends" },
-  { label: "Found myself", value: "found-myself" },
-];
-
 export default function RegisterForm({ className, ...props }: RegisterFormProps) {
-  const [isClient, setIsClient] = useState(false);
-
   const form = useForm<RegisterForEventFormValues>({
     defaultValues: {
       fullName: "",
@@ -45,27 +39,9 @@ export default function RegisterForm({ className, ...props }: RegisterFormProps)
     resolver: zodResolver(schema),
   });
 
-  useEffect(() => {
-    if (!isClient) setIsClient(true);
-  }, [isClient]);
-
   const handleFormSubmit = () => {};
 
   const needShowSpinner = form.formState.isSubmitting;
-
-  if (!isClient)
-    return (
-      <form
-        className={cn(
-          "bg-white rounded-l-[2.5rem] px-10 pt-[20px] md:pt-[100px] md:px-[80px]",
-          className
-        )}
-      >
-        <div className=" flex flex-col max-w-[800px] mx-auto gap-6">
-          <p className="text-[32px] font-semibold">Register to Event</p>
-        </div>
-      </form>
-    );
 
   return (
     <FormProvider {...form}>
@@ -92,7 +68,7 @@ export default function RegisterForm({ className, ...props }: RegisterFormProps)
           <RadioGroup
             label="Where did you here about this event?"
             name="fruit"
-            options={radioOptions}
+            options={EVENTS_LEAD_CHANEL_OPTIONS}
           />
 
           <Button as="button" variant="secondary" type="submit" className="rounded-md text-white">

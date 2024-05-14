@@ -3,8 +3,6 @@
 import cn from "classnames";
 import { useController } from "react-hook-form";
 
-type Option = { label: string; value: any };
-
 type RadioGroupProps = {
   label: string;
   name: string;
