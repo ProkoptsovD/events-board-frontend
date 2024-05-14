@@ -1,7 +1,7 @@
 import { ComponentProps } from "react";
 import cn from "classnames";
 
-type Variant = "primary" | "secondary";
+type Variant = "primary" | "secondary" | "outline" | "text";
 type ButtonComponentProps = ComponentProps<"button"> & { as: "button"; variant?: Variant };
 type AnchorComponentProps = Omit<ComponentProps<"a">, "href"> & {
   as: "a";
@@ -43,6 +43,8 @@ const sharedStyles =
 const styles: Record<Variant, string> = {
   primary: `text-brand-400 bg-accent-100 hover:bg-accent-200 ${sharedStyles}`,
   secondary: `text-accent-100 bg-brand-500 hover:bg-brand-400 ${sharedStyles}`,
+  outline: `text-brand-400 bg-white hover:bg-gray-100 border-2 border-solid border-gray-300 rounded-lg ${sharedStyles}`,
+  text: `text-brand-400 bg-transparent ${sharedStyles}`,
 };
 
 function getVariantBasedStyles(variant: Variant) {
