@@ -1,5 +1,6 @@
 import Hero from "@/components/Hero";
-import Events from "@/features/Events";
+import EventsList from "@/features/Events/EventsList";
+import FastFilters from "@/features/FastFilters/SortBy";
 
 export default function Page() {
   return (
@@ -9,8 +10,8 @@ export default function Page() {
           <Hero />
         </div>
       </div>
-
-      <Events />
+      <FastFilters />
+      <EventsList />
     </>
   );
 }

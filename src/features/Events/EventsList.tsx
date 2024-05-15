@@ -10,7 +10,7 @@ import EventParticipants from "@/components/EventCard/EventParticipants";
 import EventPoster from "@/components/EventCard/EventPoster";
 import EventTime from "@/components/EventCard/EventTime";
 
-export default function Events() {
+export default function EventsList() {
   return (
     <div className="md:container mx-auto grid grid-cols-1 sm:[&>*]:mx-auto md:grid-cols-2 lg:grid-cols-3 gap-4 py-4">
       <EventCard>

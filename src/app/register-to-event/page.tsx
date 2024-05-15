@@ -1,9 +1,10 @@
+import EventCostTile from "@/components/EventInfo/EventCostTile";
+import EventWhenTile from "@/components/EventInfo/EventWhenTile";
+import EventWhereTile from "@/components/EventInfo/EventWhereTile";
 import RegisterToEventForm from "@/components/forms/RegisterToEventForm";
 import Header from "@/components/ui/Header";
 import Logo from "@/components/ui/Logo";
 import { formatCurrency } from "@/lib/currency";
-import { formatDate } from "@/lib/dates";
-import { MapPinIcon, Clock2Icon, TicketIcon } from "lucide-react";
 import Link from "next/link";
 
 const loadEvent = () => {
@@ -32,15 +33,10 @@ export default async function Page() {
           Great choice, mate! You are going to register for the <i>{name}</i> event!
         </h1>
         <br />
-        <p className="flex items-center gap-2 text-left text-[16px] mb-1">
-          <Clock2Icon width={20} height={20} /> When: <b>{formatDate(time)}</b>
-        </p>
-        <p className="flex items-center gap-2 text-left text-[16px] mb-1">
-          <MapPinIcon width={20} height={20} /> Where: <b>{location}</b>
-        </p>
-        <p className="flex items-center gap-2 text-left text-[16px]">
-          <TicketIcon width={20} height={20} /> Tickets: <b>{formattedCost}</b>
-        </p>
+
+        <EventWhenTile date={time} />
+        <EventWhereTile location={location} />
+        <EventCostTile cost={cost} />
       </div>
 
       <RegisterToEventForm className="col-start-6 col-span-full row-span-full" />
