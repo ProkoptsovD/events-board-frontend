@@ -46,8 +46,6 @@ export default function RadioGroup({ label, name, ...restProps }: RadioGroupProp
     }
   }, [field, isSuccess, isPlaceholderData, options]);
 
-  console.log(field.value);
-
   return (
     <fieldset>
       <p className="pb-2">{label}</p>

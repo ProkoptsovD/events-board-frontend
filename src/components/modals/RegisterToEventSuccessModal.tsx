@@ -1,5 +1,3 @@
-import { useRouter, useParams } from "next/navigation";
-
 import Modal from "@/components/ui/Modal/Modal";
 import ModalBody from "../ui/Modal/ModalBody";
 import ModalHeader from "../ui/Modal/ModalHeader";
@@ -7,17 +5,9 @@ import ModalText from "../ui/Modal/ModalText";
 import ModalActions from "../ui/Modal/ModalActions";
 import ModalActionButton from "../ui/Modal/ModalActionButton";
 
-export default function RegisterToEventSuccessModal() {
-  const router = useRouter();
-  const { eventID } = useParams<{ eventID: string }>();
+type RegisterToEventSuccessModalProps = { eventId: number | string };
 
-  function toAllEvents() {
-    router.replace("/events");
-  }
-  function toEventPage() {
-    router.replace(`/events/${eventID}`);
-  }
-
+export default function RegisterToEventSuccessModal({ eventId }: RegisterToEventSuccessModalProps) {
   return (
     <Modal>
       <ModalHeader hideClose>Congratulations!</ModalHeader>
@@ -33,10 +23,10 @@ export default function RegisterToEventSuccessModal() {
       </ModalBody>
 
       <ModalActions className="flex items-center justify-center gap-2">
-        <ModalActionButton as="button" variant="secondary" onClick={toAllEvents}>
+        <ModalActionButton as="a" href="/events" variant="secondary">
           To ALL Events
         </ModalActionButton>
-        <ModalActionButton as="button" variant="primary" onClick={toEventPage}>
+        <ModalActionButton as="a" href={`/events/${eventId}`} variant="primary">
           To Event Page
         </ModalActionButton>
       </ModalActions>
