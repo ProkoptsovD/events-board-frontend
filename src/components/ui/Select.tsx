@@ -7,9 +7,10 @@ import { useOutsideClick } from "@/lib/hooks/useOutsideClick";
 import { isNullish } from "@/lib/type.guards";
 
 import Button from "@/components/ui/Button";
+import { isElementOverflowing } from "@/lib/helpers/shared";
 
 type SelectProps = PropsWithClassName & {
-  value?: any;
+  value?: Option;
   options?: Option[];
   placeholder?: string;
   keepOpenOnSelect?: boolean;
@@ -18,7 +19,7 @@ type SelectProps = PropsWithClassName & {
 };
 
 export default function Select({
-  value,
+  value: valueObj,
   options,
   onChange,
   className,
@@ -44,7 +45,18 @@ export default function Select({
     }
   }
 
-  const selectedValue = value === "" || isNullish(value) ? placeholder : value;
+  const callbackRef = useCallback((element: HTMLDivElement) => {
+    const overflowSides = isElementOverflowing(element);
+
+    Object.entries(overflowSides).forEach(([position, isOverflow]) => {
+      if (isOverflow) {
+        element.classList.add(`${position}-0`);
+      }
+    });
+  }, []);
+
+  const selectedValue =
+    valueObj?.value === "" || isNullish(valueObj?.value) ? placeholder : valueObj?.label;
 
   return (
     <div ref={ref} className="relative inline-block">
@@ -60,6 +72,7 @@ export default function Select({
 
       {isOpened && (
         <div
+          ref={callbackRef}
           id="dropdown"
           className="z-10 absolute top-100 bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700"
         >
@@ -77,7 +90,7 @@ export default function Select({
                     variant="text"
                     value={option.value}
                     onClick={(e) => handleOptionSelect(e, option)}
-                    className="block w-full !text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                    className="block w-full !text-left px-4 py-2 hover:bg-gray-100"
                   >
                     {option.label}
                   </Button>

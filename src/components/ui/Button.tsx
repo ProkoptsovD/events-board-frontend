@@ -1,5 +1,6 @@
 import { ComponentProps } from "react";
 import cn from "classnames";
+import Link from "next/link";
 
 type Variant = "primary" | "secondary" | "outline" | "text";
 type ButtonComponentProps = ComponentProps<"button"> & { as: "button"; variant?: Variant };
@@ -32,9 +33,9 @@ export default function Button({
   }
 
   return (
-    <a {...(props as AnchorComponentProps)} className={cn("link", cssClasses, className)}>
+    <Link {...(props as AnchorComponentProps)} className={cn("link", cssClasses, className)}>
       {children}
-    </a>
+    </Link>
   );
 }
 

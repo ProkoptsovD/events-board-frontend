@@ -6,7 +6,7 @@ type HeadingProps = PropsWithChildren &
 
 export default function Heading({ as: Tag, children, className }: HeadingProps) {
   return (
-    <Tag className={cn("font-extrabold md:text-[28px] lg:text-[32] xl:text-[48px]", className)}>
+    <Tag className={cn("font-extrabold md:text-[26px] lg:text-[30px] xl:text-[34px]", className)}>
       {children}
     </Tag>
   );
