@@ -1,4 +1,4 @@
-import { DEFAULT_LOCALE } from "./const";
+import { DEFAULT_LOCALE } from "../const";
 
 export const formatCurrency = (
   value: number,
