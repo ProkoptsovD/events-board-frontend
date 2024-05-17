@@ -1,45 +1,59 @@
+import { dehydrate, HydrationBoundary, QueryClient } from "@tanstack/react-query";
+import Link from "next/link";
+
 import EventCostTile from "@/components/EventInfo/EventCostTile";
 import EventWhenTile from "@/components/EventInfo/EventWhenTile";
 import EventWhereTile from "@/components/EventInfo/EventWhereTile";
 import RegisterToEventForm from "@/components/forms/RegisterToEventForm";
 import Header from "@/components/ui/Header";
 import Logo from "@/components/ui/Logo";
-import { formatCurrency } from "@/lib/currency";
-import Link from "next/link";
 
-const loadEvent = () => {
-  return new Promise((res) => {
-    setTimeout(() => {
-      res({ name: "Cool cool event", location: "New York City", time: new Date(), cost: 0 });
-    }, 1000);
+import { eventService } from "@/lib/services/eventService";
+
+export default async function Page({
+  searchParams,
+}: {
+  searchParams: { [key: string]: string | string[] | undefined };
+}) {
+  const queryClient = new QueryClient();
+  const { eventID } = searchParams ?? { eventID: "" };
+
+  const event = await queryClient.fetchQuery({
+    queryKey: [eventID],
+    queryFn: () => eventService.getEventById(Number(eventID)),
   });
-};
 
-export default async function Page() {
-  const { name, location, time, cost } = await loadEvent();
-
-  const formattedCost = cost ? formatCurrency(cost) : "Free";
+  if (!event) {
+    return <div>Opps, event does not exist</div>;
+  }
 
   return (
-    <div className="bg-brand-300 h-screen grid grid-cols-12 grid-rows-12 gap-2">
-      <Header className="col-start-1 col-end-5 row-span-1 bg-brand-300">
-        <Link href="/" className="col-start-1 cursor-pointer">
-          <Logo />
-        </Link>
-      </Header>
+    <HydrationBoundary state={dehydrate(queryClient)}>
+      <div className="bg-brand-300 h-screen grid grid-cols-12 grid-rows-12 gap-2">
+        <Header className="col-start-1 col-end-6 row-span-1 bg-brand-300">
+          <Link href="/" className="col-start-1 cursor-pointer">
+            <Logo />
+          </Link>
+        </Header>
 
-      <div className="col-start-2 col-end-5 row-start-4 pl-4 pr-4 text-center text-white text-[20px]">
-        <h1 className="text-center">
-          Great choice, mate! You are going to register for the <i>{name}</i> event!
-        </h1>
-        <br />
+        <div className="col-start-1 col-end-6 row-start-4 pl-4 pr-4 text-center text-white text-[20px] max-w-[400px] mx-auto">
+          <h1 className="text-center">
+            Great choice, mate! You are going to register to the event
+            <br />
+            <i className="text-accent-200">{event.title}</i>
+          </h1>
+          <br />
 
-        <EventWhenTile date={time} />
-        <EventWhereTile location={location} />
-        <EventCostTile cost={cost} />
+          <EventWhenTile date={String(event.startingAt)} />
+          <EventWhereTile location={event.venue} />
+          <EventCostTile cost={event.cost} />
+        </div>
+
+        <RegisterToEventForm
+          eventId={Number(eventID)}
+          className="col-start-6 col-span-full row-span-full"
+        />
       </div>
-
-      <RegisterToEventForm className="col-start-6 col-span-full row-span-full" />
-    </div>
+    </HydrationBoundary>
   );
 }
