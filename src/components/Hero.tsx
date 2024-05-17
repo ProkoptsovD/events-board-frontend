@@ -1,6 +1,5 @@
 import cn from "classnames";
-import { SearchIcon } from "lucide-react";
-import SearchInput from "@/components/ui/SearchInput";
+import { EventsSearch } from "@/features/FastFilters";
 
 export default function Hero({ className }: PropsWithClassName) {
   return (
@@ -14,11 +13,7 @@ export default function Hero({ className }: PropsWithClassName) {
         Explore a world of events. Find what excites you!
       </h1>
 
-      <SearchInput
-        placeholder="Search Events..."
-        icon={<SearchIcon />}
-        className="[&_.label]:text-white max-w-[55ch] w-full"
-      />
+      <EventsSearch />
     </div>
   );
 }
