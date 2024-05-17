@@ -1,4 +1,4 @@
-import { formatCurrency } from "@/lib/currency";
+import { formatCurrency } from "@/lib/helpers/currency";
 import cn from "classnames";
 import { TicketIcon } from "lucide-react";
 

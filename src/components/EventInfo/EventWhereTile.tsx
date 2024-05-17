@@ -2,17 +2,21 @@ import { MapPinIcon } from "lucide-react";
 
 import EventBaseTile from "./EventBaseTile";
 
-type EventWhereTileProps = { location: string } & PropsWithClassName;
+type EventWhereTileProps = { location: Venue | null | undefined } & PropsWithClassName;
 
 export default function EventWhereTile({ location, className }: EventWhereTileProps) {
+  const address = !location
+    ? "No location provided..."
+    : `${location.country}, ${location.state}, ${location.city} ${location.address}`;
+
   return (
     <EventBaseTile
       className={className}
-      icon={<MapPinIcon width={20} height={20} />}
+      icon={<MapPinIcon className="shrink-0" width={20} height={20} />}
       value={
-        <>
-          Where: <b>{location}</b>
-        </>
+        <span className="flex flex-wrap">
+          Where:&nbsp;<b className="text-violet-300">{address}</b>
+        </span>
       }
     />
   );

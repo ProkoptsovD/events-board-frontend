@@ -1,7 +1,7 @@
 import { TicketIcon } from "lucide-react";
 
 import EventBaseTile from "./EventBaseTile";
-import { formatCurrency } from "@/lib/currency";
+import { formatCurrency } from "@/lib/helpers/currency";
 
 type EventCostTileProps = { cost: number } & PropsWithClassName;
 
@@ -11,11 +11,11 @@ export default function EventCostTile({ cost, className }: EventCostTileProps) {
   return (
     <EventBaseTile
       className={className}
-      icon={<TicketIcon width={20} height={20} />}
+      icon={<TicketIcon className="shrink-0" width={20} height={20} />}
       value={
-        <>
-          Tickets: <b>{formattedCost}</b>
-        </>
+        <span className="flex flex-wrap">
+          Tickets:&nbsp;<b className="text-violet-300">{formattedCost}</b>
+        </span>
       }
     />
   );

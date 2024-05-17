@@ -1,3 +1,11 @@
+"use client";
+
+import cn from "classnames";
+import dynamic from "next/dynamic";
+import { useSearchParams } from "next/navigation";
+import { Suspense, useCallback, useMemo, useRef } from "react";
+import { ArrowBigUpIcon } from "lucide-react";
+
 import EventActionButton from "@/components/EventCard/EventActionButton";
 import EventCard from "@/components/EventCard/EventCard";
 import EventCost from "@/components/EventCard/EventCost";
@@ -9,165 +17,115 @@ import EventName from "@/components/EventCard/EventName";
 import EventParticipants from "@/components/EventCard/EventParticipants";
 import EventPoster from "@/components/EventCard/EventPoster";
 import EventTime from "@/components/EventCard/EventTime";
+import { useEvents } from "@/lib/hooks/queries/useEvents";
+import IconButton from "@/components/ui/IconButton";
 
-export default function EventsList() {
+const EmptyEventsList = dynamic(() => import("@/components/emptyStates/EmptyEventsList"));
+
+export default function EventsList({ className }: PropsWithClassName) {
+  const observer = useRef<IntersectionObserver>();
+
+  const searchParams = useSearchParams();
+  const page = searchParams.get("page") ?? "1";
+  const perPage = searchParams.get("perPage") ?? "10";
+  const sortBy = searchParams.get("sortBy") ?? "title";
+  const queryText = searchParams.get("q") ?? "";
+
+  const { data, isSuccess, fetchNextPage, hasNextPage, isFetching, isLoading } = useEvents({
+    page,
+    perPage,
+    sortBy,
+    q: queryText,
+  });
+
+  const lastElementRef = useCallback(
+    (node: HTMLLIElement) => {
+      if (isLoading) return;
+
+      if (observer.current) observer.current.disconnect();
+
+      observer.current = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting && hasNextPage && !isFetching) {
+          fetchNextPage();
+        }
+      });
+
+      if (node) observer.current.observe(node);
+    },
+    [fetchNextPage, hasNextPage, isFetching, isLoading]
+  );
+
+  const events = useMemo(() => {
+    return data?.pages.reduce((acc, page) => [...(acc || []), ...(page || [])], []);
+  }, [data]);
+
+  const scrollToTop = () => {
+    if (typeof window !== "undefined") {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  };
+
+  const isEmptyList = events?.length === 0 && isSuccess;
+
+  if (isEmptyList) {
+    return (
+      <Suspense>
+        <EmptyEventsList />
+      </Suspense>
+    );
+  }
+
   return (
-    <div className="md:container mx-auto grid grid-cols-1 sm:[&>*]:mx-auto md:grid-cols-2 lg:grid-cols-3 gap-4 py-4">
-      <EventCard>
-        <EventPoster />
+    <>
+      <IconButton
+        icon={<ArrowBigUpIcon />}
+        onClick={scrollToTop}
+        className="fixed bottom-4 right-4 bg-brand-100 text-accent-100 p-2 z-50"
+      />
 
-        <EventDetails layout="root">
-          <EventDate date={new Date()} />
+      <ul
+        className={cn(
+          "grid grid-cols-1 sm:[&>*]:mx-auto md:grid-cols-2 lg:grid-cols-3 gap-4 py-4",
+          className
+        )}
+      >
+        {events?.map((event) => {
+          return (
+            <li key={event.id} ref={lastElementRef}>
+              <EventCard>
+                <EventPoster src={event.image} width={600} height={500} />
 
-          <EventDetails layout="subgrid">
-            <EventName>Fancy event</EventName>
-            <EventDescription>Super duper cool event in New York</EventDescription>
-            <EventTime date={new Date()} />
+                <EventDetails layout="root">
+                  <EventDate date={event.startingAt} />
 
-            <EventCost cost={null} />
-            <EventParticipants participantsCount={0} />
-          </EventDetails>
-        </EventDetails>
+                  <EventDetails layout="subgrid">
+                    <EventName>{event.title}</EventName>
+                    <EventDescription>{event.description}</EventDescription>
+                    <EventTime date={event.startingAt} />
 
-        <EventFooter>
-          <EventActionButton as="a" href="/" variant="primary">
-            Register now
-          </EventActionButton>
-          <EventActionButton as="a" href="/">
-            View
-          </EventActionButton>
-        </EventFooter>
-      </EventCard>
+                    <EventCost cost={event.cost} />
+                    <EventParticipants participantsCount={event.participantsCount} />
+                  </EventDetails>
+                </EventDetails>
 
-      <EventCard>
-        <EventPoster />
+                <EventFooter>
+                  <EventActionButton
+                    as="a"
+                    href={`/register-to-event?eventID=${event.id}`}
+                    variant="primary"
+                  >
+                    Register now
+                  </EventActionButton>
 
-        <EventDetails layout="root">
-          <EventDate date={new Date()} />
-
-          <EventDetails layout="subgrid">
-            <EventName>Fancy event</EventName>
-            <EventDescription>Super duper cool event in New York</EventDescription>
-            <EventTime date={new Date()} />
-
-            <EventCost cost={1200} />
-            <EventParticipants participantsCount={12} />
-          </EventDetails>
-        </EventDetails>
-
-        <EventFooter>
-          <EventActionButton as="a" href="/" variant="primary">
-            Register now
-          </EventActionButton>
-          <EventActionButton as="a" href="/">
-            View
-          </EventActionButton>
-        </EventFooter>
-      </EventCard>
-
-      <EventCard>
-        <EventPoster />
-
-        <EventDetails layout="root">
-          <EventDate date={new Date()} />
-
-          <EventDetails layout="subgrid">
-            <EventName>Fancy event</EventName>
-            <EventDescription>Super duper cool event in New York</EventDescription>
-            <EventTime date={new Date()} />
-
-            <EventCost cost={1200} />
-            <EventParticipants participantsCount={12} />
-          </EventDetails>
-        </EventDetails>
-
-        <EventFooter>
-          <EventActionButton as="a" href="/" variant="primary">
-            Register now
-          </EventActionButton>
-          <EventActionButton as="a" href="/">
-            View
-          </EventActionButton>
-        </EventFooter>
-      </EventCard>
-
-      <EventCard>
-        <EventPoster />
-
-        <EventDetails layout="root">
-          <EventDate date={new Date()} />
-
-          <EventDetails layout="subgrid">
-            <EventName>Fancy event</EventName>
-            <EventDescription>Super duper cool event in New York</EventDescription>
-            <EventTime date={new Date()} />
-
-            <EventCost cost={1200} />
-            <EventParticipants participantsCount={12} />
-          </EventDetails>
-        </EventDetails>
-
-        <EventFooter>
-          <EventActionButton as="a" href="/" variant="primary">
-            Register now
-          </EventActionButton>
-          <EventActionButton as="a" href="/">
-            View
-          </EventActionButton>
-        </EventFooter>
-      </EventCard>
-
-      <EventCard>
-        <EventPoster />
-
-        <EventDetails layout="root">
-          <EventDate date={new Date()} />
-
-          <EventDetails layout="subgrid">
-            <EventName>Fancy event</EventName>
-            <EventDescription>Super duper cool event in New York</EventDescription>
-            <EventTime date={new Date()} />
-
-            <EventCost cost={1200} />
-            <EventParticipants participantsCount={12} />
-          </EventDetails>
-        </EventDetails>
-
-        <EventFooter>
-          <EventActionButton as="a" href="/" variant="primary">
-            Register now
-          </EventActionButton>
-          <EventActionButton as="a" href="/">
-            View
-          </EventActionButton>
-        </EventFooter>
-      </EventCard>
-
-      <EventCard>
-        <EventPoster />
-
-        <EventDetails layout="root">
-          <EventDate date={new Date()} />
-
-          <EventDetails layout="subgrid">
-            <EventName>Fancy event</EventName>
-            <EventDescription>Super duper cool event in New York</EventDescription>
-            <EventTime date={new Date()} />
-
-            <EventCost cost={1200} />
-            <EventParticipants participantsCount={12} />
-          </EventDetails>
-        </EventDetails>
-
-        <EventFooter>
-          <EventActionButton as="a" href="/" variant="primary">
-            Register now
-          </EventActionButton>
-          <EventActionButton as="a" href="/">
-            View
-          </EventActionButton>
-        </EventFooter>
-      </EventCard>
-    </div>
+                  <EventActionButton as="a" href={`/events/${event.id}`}>
+                    View
+                  </EventActionButton>
+                </EventFooter>
+              </EventCard>
+            </li>
+          );
+        })}
+      </ul>
+    </>
   );
 }

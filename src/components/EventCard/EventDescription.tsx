@@ -3,16 +3,11 @@ import EventName, { EventNameProps } from "@/components/EventCard/EventName";
 
 type EventDescriptionProps = EventNameProps;
 
-export default function EventDescription({
-  children,
-  className,
-  clamp = 2,
-  ...props
-}: EventDescriptionProps) {
+export default function EventDescription({ children, className, ...props }: EventDescriptionProps) {
   if (!children) return null;
 
   return (
-    <EventName {...props} className={cn("text-brand-700 !text-[12px]", className)} clamp={clamp}>
+    <EventName {...props} className={cn("text-brand-700 !text-[12px] !line-clamp-3", className)}>
       {children}
     </EventName>
   );

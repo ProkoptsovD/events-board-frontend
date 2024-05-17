@@ -1,4 +1,4 @@
-import { formatTime } from "@/lib/dates";
+import { formatTime } from "@/lib/helpers/dates";
 import cn from "classnames";
 
 type FormatterFn = (date: Date | string | number, options?: Record<string, unknown>) => string;
