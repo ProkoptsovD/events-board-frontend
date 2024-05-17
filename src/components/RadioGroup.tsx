@@ -1,16 +1,52 @@
 "use client";
 
+import { useQuery } from "@tanstack/react-query";
 import cn from "classnames";
+import { useEffect, useRef } from "react";
 import { useController } from "react-hook-form";
 
-type RadioGroupProps = {
+type RadioGroupBaseProps = {
   label: string;
   name: string;
-  options: Option[];
 };
 
-export default function RadioGroup({ label, name, options }: RadioGroupProps) {
+type RadioGroupProps =
+  | (RadioGroupBaseProps & {
+      options: Option[];
+    })
+  | (RadioGroupBaseProps & { loadAsyncOptions: () => Promise<{ data: Option[] } | null> });
+
+export default function RadioGroup({ label, name, ...restProps }: RadioGroupProps) {
+  const resolvedQueryFn =
+    "loadAsyncOptions" in restProps
+      ? restProps.loadAsyncOptions
+      : () => Promise.resolve({ data: restProps.options });
+
+  const { data, isSuccess, isPlaceholderData } = useQuery({
+    queryKey: [name],
+    queryFn: resolvedQueryFn,
+    staleTime: 0,
+    placeholderData: {
+      data: [
+        { label: "Loading...", value: "1" },
+        { label: "Loading...", value: "2" },
+        { label: "Loading...", value: "3" },
+      ],
+    },
+  });
+
+  const { data: options = [] } = data ?? {};
   const { field } = useController({ name });
+  const isDefaultValueSet = useRef<boolean>(false);
+
+  useEffect(() => {
+    if (isSuccess && !isPlaceholderData && !isDefaultValueSet.current) {
+      field.onChange(options[0].value);
+      isDefaultValueSet.current = true;
+    }
+  }, [field, isSuccess, isPlaceholderData, options]);
+
+  console.log(field.value);
 
   return (
     <fieldset>
