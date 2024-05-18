@@ -4,7 +4,6 @@ import cn from "classnames";
 import dynamic from "next/dynamic";
 import { useSearchParams } from "next/navigation";
 import { Suspense, useCallback, useMemo, useRef } from "react";
-import { ArrowBigUpIcon } from "lucide-react";
 
 import { useEventsQuery } from "@/lib/hooks/queries/useEventsQuery";
 
@@ -19,8 +18,9 @@ import EventName from "@/components/EventCard/EventName";
 import EventParticipants from "@/components/EventCard/EventParticipants";
 import EventPoster from "@/components/EventCard/EventPoster";
 import EventTime from "@/components/EventCard/EventTime";
-import IconButton from "@/components/ui/IconButton";
 import EventOrganizer from "@/components/EventCard/EventOrganizer";
+import LoadingMoreSpinner from "@/components/ui/LoadingMoreSpinner";
+import ToTopButton from "@/components/ToTopButton";
 
 const EmptyEventsList = dynamic(() => import("@/components/emptyStates/EmptyEventsList"));
 
@@ -68,6 +68,7 @@ export default function EventsList({ className }: PropsWithClassName) {
   };
 
   const isEmptyList = events?.length === 0 && isSuccess;
+  const isLoadingMore = !!data && isFetching;
 
   if (isEmptyList) {
     return (
@@ -79,11 +80,7 @@ export default function EventsList({ className }: PropsWithClassName) {
 
   return (
     <>
-      <IconButton
-        icon={<ArrowBigUpIcon />}
-        onClick={scrollToTop}
-        className="fixed bottom-4 right-4 bg-brand-100 text-accent-100 p-2 z-50"
-      />
+      <ToTopButton />
 
       <ul
         className={cn(
@@ -129,6 +126,7 @@ export default function EventsList({ className }: PropsWithClassName) {
           );
         })}
       </ul>
+      {isLoadingMore && <LoadingMoreSpinner />}
     </>
   );
 }

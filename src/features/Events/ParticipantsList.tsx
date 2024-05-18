@@ -85,7 +85,7 @@ export default function ParticipantsList({ className, eventId }: ParticipantsLis
             className
           )}
         >
-          {resolvedParticipants!.map((participant) => (
+          {resolvedParticipants?.map((participant) => (
             <li key={participant.id} className="w-full">
               <ParticipantCardBody>
                 <ParticipantAvatar />
