@@ -14,6 +14,8 @@ import EventCostTile from "@/components/EventInfo/EventCostTile";
 import ParticipantsList from "@/features/Events/ParticipantsList";
 import EventRegisterChart from "@/features/Events/EventRegisterChart";
 import EventOrganizerTile from "@/components/EventInfo/EventOrganizerTile";
+import { notFound } from "next/navigation";
+import { isNumber } from "@/lib/type.guards";
 
 export const revalidate = 300;
 
@@ -34,6 +36,10 @@ export default async function Page({ params: { id } }: PageProps<{ id: string }>
   const bgPattern = useBgPattern();
   const eventId = Number(id);
 
+  if (!eventId && !isNumber(eventId)) {
+    notFound();
+  }
+
   const result = await Promise.all([
     eventService.getEventById(eventId),
     queryClient.fetchQuery({
@@ -46,8 +52,13 @@ export default async function Page({ params: { id } }: PageProps<{ id: string }>
     }),
   ]);
 
-  const event = result[0];
   const dehydratedState = dehydrate(queryClient);
+
+  const event = result[0];
+
+  if (!event) {
+    notFound();
+  }
 
   const { cost, image, organizer, startingAt, title, venue } = event ?? ({} as IEvent);
 
@@ -65,10 +76,15 @@ export default async function Page({ params: { id } }: PageProps<{ id: string }>
       >
         <Image
           src={image || fallbackImage}
-          width={300}
+          width={320}
           height={200}
           alt="poster"
+          priority
           className="mx-auto"
+          style={{
+            width: "320px",
+            height: "200px",
+          }}
         />
       </div>
 

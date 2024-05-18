@@ -1,4 +1,6 @@
 import "./globals.css";
+import cn from "classnames";
+
 import { Metadata } from "next";
 import { Inter } from "next/font/google";
 
@@ -18,7 +20,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body className={cn(inter.className)}>
         <ReactQueryClientProvider>{children}</ReactQueryClientProvider>
       </body>
     </html>

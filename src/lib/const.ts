@@ -11,7 +11,7 @@ export const BG_PATTERNS_CSS_CLASSES = [
   "circle",
   "circle-2",
   "triangle",
-];
+] as const;
 
 export const ANIMALS_LIST = [
   "alligator",
