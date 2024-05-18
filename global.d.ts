@@ -29,13 +29,13 @@ type APIRequestSuccess<TData = unknown> = {
 };
 
 type BaseSearchParams = {
-  perPage: string;
-  page: string;
+  perPage?: string;
+  page?: string;
   q?: string;
 };
 
 type EventSearchParams = BaseSearchParams & {
-  sortBy: string;
+  sortBy?: string;
 };
 
 type PageProps<Params, SearchParams = undefined> = {

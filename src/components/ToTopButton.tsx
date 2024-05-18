@@ -35,7 +35,7 @@ export default function ToTopButton({ className, visibleOn = 600 }: ToTopButtonP
         window.removeEventListener("scroll", handleScroll);
       };
     }
-  }, []);
+  }, [visibleOn]);
 
   return (
     <IconButton

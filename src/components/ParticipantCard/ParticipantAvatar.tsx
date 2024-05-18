@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useAvatar } from "@/lib/hooks/useAvatar";
 
 type ParticipantAvatarProps = PropsWithClassName & {
@@ -15,7 +16,7 @@ export default function ParticipantAvatar({ iconSize = 30 }: ParticipantAvatarPr
       className="flex-shrink-0 relative overflow-hidden rounded-full p-1"
       style={{ backgroundColor: color }}
     >
-      <img src={src} width={iconSize} height={iconSize} alt="avatar" />
+      <Image src={src} width={iconSize} height={iconSize} alt={name} />
     </div>
   );
 }

@@ -15,7 +15,17 @@ import ParticipantsList from "@/features/Events/ParticipantsList";
 import EventRegisterChart from "@/features/Events/EventRegisterChart";
 import EventOrganizerTile from "@/components/EventInfo/EventOrganizerTile";
 
-export const revalidate = 1000 * 60 * 5;
+export const revalidate = 300;
+
+export async function generateStaticParams() {
+  const events = await eventService.getAllEvents({ perPage: "50" });
+
+  if (!events) return [];
+
+  return events.map((event) => ({
+    id: String(event.id),
+  }));
+}
 
 const fallbackImage = "/assets/images/event-fallback.jpg";
 
@@ -35,7 +45,7 @@ export default async function Page({ params: { id } }: PageProps<{ id: string }>
       queryFn: () => eventService.getEventParticipants(eventId),
     }),
   ]);
-  // const event = await eventService.getEventById(eventId);
+
   const event = result[0];
   const dehydratedState = dehydrate(queryClient);
 
@@ -49,7 +59,7 @@ export default async function Page({ params: { id } }: PageProps<{ id: string }>
 
       <div
         className={cn(
-          "rounded-xl overflow-hidden border border-gray-500 mb-4 mx-auto max-w-[900px]",
+          "rounded-xl overflow-hidden border border-gray-500 mb-4 mx-auto w-fit",
           bgPattern
         )}
       >

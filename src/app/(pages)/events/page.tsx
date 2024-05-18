@@ -6,7 +6,7 @@ import { getUseEventsQueryKeys } from "@/lib/hooks/queries/useEventsQuery";
 import { eventService } from "@/lib/services/eventService";
 import { dehydrate, HydrationBoundary, QueryClient } from "@tanstack/react-query";
 
-export const revalidate = 1000 * 60 * 5;
+export const revalidate = 300;
 
 export default async function Page({ searchParams }: PageProps<unknown, EventSearchParams>) {
   const queryClient = new QueryClient();

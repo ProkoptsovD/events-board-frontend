@@ -25,6 +25,7 @@
     "react-hook-form": "^7.51.4",
     "react-tooltip": "^5.26.4",
     "save": "^2.9.0",
+    "sharp": "^0.33.4",
     "zod": "^3.23.8"
   },
   "devDependencies": {

@@ -11,7 +11,7 @@ const baseFetch = async <TData = unknown, TError = unknown>(
 ): Promise<TData | TError> => {
   try {
     const apiUrl = API_URL + url;
-    const response = await fetch(apiUrl, options);
+    const response = await fetch(apiUrl);
     const data = response.json();
 
     return data as TData;

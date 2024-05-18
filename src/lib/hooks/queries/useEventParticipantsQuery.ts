@@ -12,7 +12,7 @@ export const useEventParticipantsQuery = (id: number) => {
     queryKey: getUseEventParticipantsQueryKeys(id),
     queryFn: () => eventService.getEventParticipants(id),
     refetchOnWindowFocus: true,
-    staleTime: 1000 * 60 * 5,
+    staleTime: 300,
     enabled: isNumber(id),
   });
 

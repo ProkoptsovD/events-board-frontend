@@ -12,7 +12,7 @@ export const useEventRegistrationStatsQuery = (id: number) => {
     queryKey: getUseEventRegistrationStatsQueryKeys(id),
     queryFn: () => eventService.getEventRegistrationStats(id),
     refetchOnWindowFocus: true,
-    staleTime: 1000 * 60 * 5,
+    staleTime: 300,
     enabled: isNumber(id),
   });
 

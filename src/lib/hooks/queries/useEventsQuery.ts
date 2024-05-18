@@ -16,7 +16,7 @@ export const useEventsQuery = ({ page, perPage, sortBy, q }: EventSearchParams) 
       return lastPage?.length ? allPages.length + 1 : undefined;
     },
     refetchOnWindowFocus: true,
-    staleTime: 1000 * 60 * 5,
+    staleTime: 300,
   });
 
   return events;
