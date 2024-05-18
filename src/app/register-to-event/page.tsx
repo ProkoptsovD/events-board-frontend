@@ -9,6 +9,8 @@ import Header from "@/components/ui/Header";
 import Logo from "@/components/ui/Logo";
 
 import { eventService } from "@/lib/services/eventService";
+import { notFound } from "next/navigation";
+import { isNumber } from "chart.js/helpers";
 
 export default async function Page({
   searchParams,
@@ -18,13 +20,17 @@ export default async function Page({
   const queryClient = new QueryClient();
   const { eventID } = searchParams ?? { eventID: "" };
 
+  if (!eventID && !isNumber(Number(eventID))) {
+    notFound();
+  }
+
   const event = await queryClient.fetchQuery({
     queryKey: [eventID],
     queryFn: () => eventService.getEventById(Number(eventID)),
   });
 
   if (!event) {
-    return <div>Opps, event does not exist</div>;
+    notFound();
   }
 
   return (
