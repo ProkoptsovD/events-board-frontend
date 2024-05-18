@@ -29,10 +29,10 @@ export default function EventsList({ className }: PropsWithClassName) {
   const observer = useRef<IntersectionObserver>();
 
   const searchParams = useSearchParams();
-  const page = searchParams.get("page") ?? "1";
-  const perPage = searchParams.get("perPage") ?? "10";
-  const sortBy = searchParams.get("sortBy") ?? "title";
-  const queryText = searchParams.get("q") ?? "";
+  const page = searchParams.get("page") || "1";
+  const perPage = searchParams.get("perPage") || "10";
+  const sortBy = searchParams.get("sortBy") || "title";
+  const queryText = searchParams.get("q") || "";
 
   const { data, isSuccess, fetchNextPage, hasNextPage, isFetching, isLoading, isPlaceholderData } =
     useEventsQuery({
@@ -60,7 +60,7 @@ export default function EventsList({ className }: PropsWithClassName) {
   );
 
   const events = useMemo(() => {
-    return data?.pages.reduce((acc, page) => [...(acc || []), ...(page || [])], []);
+    return data?.pages?.reduce((acc, page) => [...(acc || []), ...(page || [])], []);
   }, [data]);
 
   const isEmptyList = events?.length === 0 && isSuccess;

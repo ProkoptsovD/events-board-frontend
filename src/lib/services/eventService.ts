@@ -7,12 +7,7 @@ const getAllEvents = async (options?: EventSearchParams) => {
     const searchParams = new URLSearchParams(options ?? {});
     const url = `/events?${searchParams.toString()}`;
 
-    const response = await httpClient.get<EventsResponse>(url, {
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Methods": "GET,OPTIONS,PATCH,DELETE,POST,PUT",
-      },
-    });
+    const response = await httpClient.get<EventsResponse>(url);
 
     if ("data" in response) {
       return response.data.events;

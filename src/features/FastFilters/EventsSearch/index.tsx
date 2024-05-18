@@ -4,6 +4,7 @@ import { usePathname, useSearchParams, useRouter } from "next/navigation";
 
 import SearchInput from "@/components/ui/SearchInput";
 import { SearchIcon } from "lucide-react";
+import { useEffect } from "react";
 
 const inputProps = {
   placeholder: "Search Events...",
@@ -30,7 +31,6 @@ export default function EventsSearch() {
 
     const search = current.toString();
     const query = search ? `?${search}` : "";
-
     router.push(`${pathname}${query}`);
   };
 
