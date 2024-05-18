@@ -34,12 +34,13 @@ export default function EventsList({ className }: PropsWithClassName) {
   const sortBy = searchParams.get("sortBy") ?? "title";
   const queryText = searchParams.get("q") ?? "";
 
-  const { data, isSuccess, fetchNextPage, hasNextPage, isFetching, isLoading } = useEventsQuery({
-    page,
-    perPage,
-    sortBy,
-    q: queryText,
-  });
+  const { data, isSuccess, fetchNextPage, hasNextPage, isFetching, isLoading, isPlaceholderData } =
+    useEventsQuery({
+      page,
+      perPage,
+      sortBy,
+      q: queryText,
+    });
 
   const lastElementRef = useCallback(
     (node: HTMLLIElement) => {
@@ -61,12 +62,6 @@ export default function EventsList({ className }: PropsWithClassName) {
   const events = useMemo(() => {
     return data?.pages.reduce((acc, page) => [...(acc || []), ...(page || [])], []);
   }, [data]);
-
-  const scrollToTop = () => {
-    if (typeof window !== "undefined") {
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    }
-  };
 
   const isEmptyList = events?.length === 0 && isSuccess;
   const isLoadingMore = !!data && isFetching;
@@ -90,7 +85,10 @@ export default function EventsList({ className }: PropsWithClassName) {
         )}
       >
         {events?.map((event) => {
-          return <EventCardSkeleton key={event.id} />;
+          if (isPlaceholderData) {
+            return <EventCardSkeleton key={event.id} />;
+          }
+
           return (
             <li key={event.id} ref={lastElementRef}>
               <EventCard>
