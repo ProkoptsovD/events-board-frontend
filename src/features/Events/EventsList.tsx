@@ -21,6 +21,7 @@ import EventTime from "@/components/EventCard/EventTime";
 import EventOrganizer from "@/components/EventCard/EventOrganizer";
 import LoadingMoreSpinner from "@/components/ui/LoadingMoreSpinner";
 import ToTopButton from "@/components/ToTopButton";
+import EventCardSkeleton from "@/components/EventCard/EventCardSkeleton";
 
 const EmptyEventsList = dynamic(() => import("@/components/emptyStates/EmptyEventsList"));
 
@@ -89,6 +90,7 @@ export default function EventsList({ className }: PropsWithClassName) {
         )}
       >
         {events?.map((event) => {
+          return <EventCardSkeleton key={event.id} />;
           return (
             <li key={event.id} ref={lastElementRef}>
               <EventCard>

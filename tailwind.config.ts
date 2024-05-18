@@ -14,7 +14,7 @@ const config: Config = {
         current: "currentColor",
         brand: {
           100: "#2B293D",
-          200: "#2b293d81",
+          200: "#2b293d",
           300: "#2D2C3C",
           400: "#1F1D2E",
           500: "#413F53",
