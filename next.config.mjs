@@ -34,9 +34,6 @@ const nextConfig = {
       },
     ];
   },
-  env: {
-    SERVER_URL: "http://localhost:3003",
-  },
   images: {
     remotePatterns: [
       {
