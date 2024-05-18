@@ -23,9 +23,9 @@ const RegisterToEventSuccessModal = dynamic(
 
 const schema = z.object({
   name: z
-    .string()
-    .min(1, "Full name is required")
-    .regex(/\w+\s\w+/, "Must be at least two words"),
+    .string({ required_error: "Full name is required" })
+    .min(3, "Need at least 3 chars")
+    .max(255, "Must be less than 255 chars"),
   email: z.string().email(),
   birthDate: z.date().or(z.string().min(1, "Date of Birth is required")),
   eventChannel: z.string().min(1, "The field is required"),

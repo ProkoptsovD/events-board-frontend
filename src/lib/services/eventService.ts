@@ -66,7 +66,22 @@ const registerToEvent = async (eventId: number, participant: CreateEventParticip
     return null;
   }
 };
+const getEventRegistrationStats = async (eventId: number) => {
+  try {
+    const stats = await httpClient.get<EventRegistrationStatsEntry[]>(
+      `/events/${eventId}/stats/registration`
+    );
 
+    if ("data" in stats) {
+      return stats.data;
+    }
+
+    return [];
+  } catch (err) {
+    console.log(err);
+    return null;
+  }
+};
 const getEventSortByOptions = async () => {
   try {
     const response = await httpClient.get<Option[]>("/events/options/sort-by");
@@ -82,7 +97,6 @@ const getEventSortByOptions = async () => {
     return null;
   }
 };
-
 const getEventChanelByOptions = async () => {
   try {
     const response = await httpClient.get<Option[]>("/events/options/event-chanel");
@@ -100,6 +114,7 @@ const getEventChanelByOptions = async () => {
 };
 
 export const eventService = {
+  getEventRegistrationStats,
   getEventChanelByOptions,
   getEventSortByOptions,
   getEventParticipants,

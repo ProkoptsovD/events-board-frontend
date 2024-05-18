@@ -9,18 +9,22 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "-": "^0.0.1",
     "@hookform/resolvers": "^3.3.4",
     "@tailwindcss/line-clamp": "^0.4.4",
     "@tanstack/react-query": "^5.36.2",
+    "chart.js": "^4.4.3",
     "classnames": "^2.5.1",
     "dayjs": "^1.11.11",
     "lucide-react": "^0.378.0",
     "next": "14.2.3",
     "react": "^18",
     "react-calendar": "^5.0.0",
+    "react-chartjs-2": "^5.2.0",
     "react-dom": "^18",
     "react-hook-form": "^7.51.4",
-    "recharts": "^2.12.7",
+    "react-tooltip": "^5.26.4",
+    "save": "^2.9.0",
     "zod": "^3.23.8"
   },
   "devDependencies": {

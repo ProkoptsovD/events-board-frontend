@@ -5,7 +5,7 @@ import dynamic from "next/dynamic";
 import { Suspense, useMemo, useState } from "react";
 import { SearchIcon } from "lucide-react";
 
-import { useEventParticipants } from "@/lib/hooks/queries/useEventParticipants";
+import { useEventParticipantsQuery } from "@/lib/hooks/queries/useEventParticipantsQuery";
 
 import Heading from "@/components/ui/Heading";
 import SearchInput from "@/components/ui/SearchInput";
@@ -18,15 +18,18 @@ import ParticipantName from "@/components/ParticipantCard/ParticipantName";
 import EmptyParticipantSearchResult from "@/components/emptyStates/EmptyParticipantSearchResult";
 
 const EmptyParticipantList = dynamic(() => import("@/components/emptyStates/EmptyParticipantList"));
+const emptyList = [] as EventParticipant[];
 
 type ParticipantsListProps = PropsWithClassName & { eventId: number };
-
-const emptyList = [] as EventParticipant[];
 
 export default function ParticipantsList({ className, eventId }: ParticipantsListProps) {
   const [inMemoryFilter, setInMemoryFilter] = useState<string>("");
 
-  const { data: participants = emptyList, isSuccess } = useEventParticipants(eventId);
+  const {
+    data: participants = emptyList,
+    isSuccess,
+    isLoading,
+  } = useEventParticipantsQuery(eventId);
 
   const onParticipantSearch = (query: string) => {
     setInMemoryFilter(query);
@@ -44,6 +47,8 @@ export default function ParticipantsList({ className, eventId }: ParticipantsLis
 
   const isEmptyList = participants?.length === 0 && isSuccess;
   const isEmptyFiltering = resolvedParticipants?.length === 0 && !isEmptyList;
+
+  if (isLoading) return null;
 
   if (isEmptyList) {
     return (
@@ -76,7 +81,7 @@ export default function ParticipantsList({ className, eventId }: ParticipantsLis
       {!isEmptyFiltering && (
         <ul
           className={cn(
-            "grid grid-cols-1 sm:[&>*]:mx-auto md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 py-4",
+            "grid grid-cols-1 sm:[&>*]:mx-auto md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 py-4 max-h-[400px] overflow-auto overscroll-y-contain",
             className
           )}
         >

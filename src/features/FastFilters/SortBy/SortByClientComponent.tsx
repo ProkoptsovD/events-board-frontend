@@ -17,7 +17,7 @@ const sortByKey = "sortBy";
 export default function SortByClientComponent({ className }: PropsWithClassName) {
   const searchParams = useSearchParams();
   const pathname = usePathname();
-  const { push } = useRouter();
+  const { replace } = useRouter();
 
   const { data } = useQuery({
     queryKey: [undefined],
@@ -36,7 +36,7 @@ export default function SortByClientComponent({ className }: PropsWithClassName)
   }, [sortByInUrlQuery, options]);
 
   const updateSearchParams = (params: string) => {
-    push(params);
+    replace(params, { scroll: false });
   };
 
   const handleSortByChange = (_: MouseEvent<HTMLElement>, option: Option) => {

@@ -1,5 +1,11 @@
 import Image from "next/image";
 import cn from "classnames";
+import { QueryClient, HydrationBoundary, dehydrate } from "@tanstack/react-query";
+
+import { eventService } from "@/lib/services/eventService";
+import { useBgPattern } from "@/lib/hooks/useBgPattern";
+import { getUseEventParticipantsQueryKeys } from "@/lib/hooks/queries/useEventParticipantsQuery";
+import { getUseEventRegistrationStatsQueryKeys } from "@/lib/hooks/queries/useEventRegistrationStatsQuery";
 
 import Heading from "@/components/ui/Heading";
 import EventWhenTile from "@/components/EventInfo/EventWhenTile";
@@ -7,18 +13,31 @@ import EventWhereTile from "@/components/EventInfo/EventWhereTile";
 import EventCostTile from "@/components/EventInfo/EventCostTile";
 import ParticipantsList from "@/features/Events/ParticipantsList";
 import EventRegisterChart from "@/features/Events/EventRegisterChart";
-import { eventService } from "@/lib/services/eventService";
 import EventOrganizerTile from "@/components/EventInfo/EventOrganizerTile";
-import { useBgPattern } from "@/lib/hooks/useBgPattern";
 
-export const revalidate = 3600;
+export const revalidate = 1000 * 60 * 5;
+
 const fallbackImage = "/assets/images/event-fallback.jpg";
 
 export default async function Page({ params: { id } }: PageProps<{ id: string }>) {
+  const queryClient = new QueryClient();
   const bgPattern = useBgPattern();
   const eventId = Number(id);
 
-  const event = await eventService.getEventById(eventId);
+  const result = await Promise.all([
+    eventService.getEventById(eventId),
+    queryClient.fetchQuery({
+      queryKey: getUseEventRegistrationStatsQueryKeys(eventId),
+      queryFn: () => eventService.getEventRegistrationStats(eventId),
+    }),
+    queryClient.fetchQuery({
+      queryKey: getUseEventParticipantsQueryKeys(eventId),
+      queryFn: () => eventService.getEventParticipants(eventId),
+    }),
+  ]);
+  // const event = await eventService.getEventById(eventId);
+  const event = result[0];
+  const dehydratedState = dehydrate(queryClient);
 
   const { cost, image, organizer, startingAt, title, venue } = event ?? ({} as IEvent);
 
@@ -43,23 +62,23 @@ export default async function Page({ params: { id } }: PageProps<{ id: string }>
         />
       </div>
 
-      <ParticipantsList eventId={eventId} />
+      <HydrationBoundary state={dehydratedState}>
+        <ParticipantsList eventId={eventId} />
+      </HydrationBoundary>
 
       <div className="shadow-md py-2 px-4 rounded-lg mt-6">
         <Heading as="h2" className="font-semibold !text-[20px] text-alt-100 mb-4">
           Event Details
         </Heading>
 
-        <div className="grid grid-cols-2">
-          <div>
-            <EventWhenTile date={startingAt} className="[&_b]:text-gray-900" />
-            <EventWhereTile location={venue} className="[&_b]:text-gray-900" />
-            <EventCostTile cost={cost} className="[&_b]:text-gray-900" />
-            <EventOrganizerTile organizer={organizer} className="[&_b]:text-gray-900" />
-          </div>
+        <EventWhenTile date={startingAt} className="[&_b]:text-gray-900" />
+        <EventWhereTile location={venue} className="[&_b]:text-gray-900" />
+        <EventCostTile cost={cost} className="[&_b]:text-gray-900" />
+        <EventOrganizerTile organizer={organizer} className="[&_b]:text-gray-900 mb-4" />
 
-          <EventRegisterChart />
-        </div>
+        <HydrationBoundary state={dehydratedState}>
+          <EventRegisterChart eventId={eventId} />
+        </HydrationBoundary>
       </div>
     </div>
   );

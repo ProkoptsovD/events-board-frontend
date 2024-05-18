@@ -6,6 +6,8 @@ import { useSearchParams } from "next/navigation";
 import { Suspense, useCallback, useMemo, useRef } from "react";
 import { ArrowBigUpIcon } from "lucide-react";
 
+import { useEventsQuery } from "@/lib/hooks/queries/useEventsQuery";
+
 import EventActionButton from "@/components/EventCard/EventActionButton";
 import EventCard from "@/components/EventCard/EventCard";
 import EventCost from "@/components/EventCard/EventCost";
@@ -17,8 +19,8 @@ import EventName from "@/components/EventCard/EventName";
 import EventParticipants from "@/components/EventCard/EventParticipants";
 import EventPoster from "@/components/EventCard/EventPoster";
 import EventTime from "@/components/EventCard/EventTime";
-import { useEvents } from "@/lib/hooks/queries/useEvents";
 import IconButton from "@/components/ui/IconButton";
+import EventOrganizer from "@/components/EventCard/EventOrganizer";
 
 const EmptyEventsList = dynamic(() => import("@/components/emptyStates/EmptyEventsList"));
 
@@ -31,7 +33,7 @@ export default function EventsList({ className }: PropsWithClassName) {
   const sortBy = searchParams.get("sortBy") ?? "title";
   const queryText = searchParams.get("q") ?? "";
 
-  const { data, isSuccess, fetchNextPage, hasNextPage, isFetching, isLoading } = useEvents({
+  const { data, isSuccess, fetchNextPage, hasNextPage, isFetching, isLoading } = useEventsQuery({
     page,
     perPage,
     sortBy,
@@ -97,14 +99,15 @@ export default function EventsList({ className }: PropsWithClassName) {
 
                 <EventDetails layout="root">
                   <EventDate date={event.startingAt} />
+                  <EventName className="mb-2">{event.title}</EventName>
 
                   <EventDetails layout="subgrid">
-                    <EventName>{event.title}</EventName>
                     <EventDescription>{event.description}</EventDescription>
                     <EventTime date={event.startingAt} />
 
                     <EventCost cost={event.cost} />
                     <EventParticipants participantsCount={event.participantsCount} />
+                    <EventOrganizer name={event.organizer} />
                   </EventDetails>
                 </EventDetails>
 

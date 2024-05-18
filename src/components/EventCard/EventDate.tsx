@@ -1,5 +1,5 @@
-import { formatDate } from "@/lib/helpers/dates";
 import cn from "classnames";
+import { formatDate } from "@/lib/helpers/dates";
 
 type FormatterFn = (date: Date | string | number, options?: Record<string, unknown>) => string;
 type EventDateProps = {
@@ -11,6 +11,11 @@ export default function EventDate({ date, className, formatter = formatDate }: E
   const formattedDate = formatter(date);
 
   return (
-    <time className={cn("break-words text-alt-100 font-semibold", className)}>{formattedDate}</time>
+    <time
+      data-tooltip-id="event-date-tooltip"
+      className={cn("break-words text-alt-100 font-semibold", className)}
+    >
+      {formattedDate}
+    </time>
   );
 }

@@ -29,3 +29,5 @@ type EventParticipant = {
 };
 
 type CreateEventParticipantDTO = Omit<EventParticipant, "id">;
+
+type EventRegistrationStatsEntry = { date: Date; count: number };
