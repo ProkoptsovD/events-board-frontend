@@ -8,6 +8,8 @@ import {
   Tooltip,
   PointElement,
   LineElement,
+  Filler,
+  Title,
 } from "chart.js";
 import { useMemo } from "react";
 import { Line } from "react-chartjs-2";
@@ -15,16 +17,22 @@ import { Line } from "react-chartjs-2";
 import { useEventRegistrationStatsQuery } from "@/lib/hooks/queries/useEventRegistrationStatsQuery";
 import { formatDate } from "@/lib/helpers/dates";
 
-ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Tooltip);
+ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Tooltip, Filler, Title);
 
 type EventRegisterChartProps = { eventId: number } & PropsWithClassName;
 
 const config = {
   animation: false as const,
-  backgroundColor: "red",
   scales: {
     yAxis: {
       beginAtZero: true,
+    },
+  },
+  responsive: true,
+  plugins: {
+    title: {
+      display: true,
+      text: "Registrations per day",
     },
   },
 };
@@ -66,9 +74,11 @@ export default function EventRegisterChart({ eventId, className }: EventRegister
       {
         label: "Count",
         data: groupedStats?.data,
-        borderColor: "#FFE047", // accent-100 color in tailwind
+        borderColor: "#2B293D", // accent-100 color in tailwind
         borderWidth: 2,
         pointRadius: 4,
+        fill: true,
+        backgroundColor: "#d4c57995",
       },
     ],
   };
