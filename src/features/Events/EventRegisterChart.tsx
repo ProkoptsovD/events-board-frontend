@@ -74,7 +74,7 @@ export default function EventRegisterChart({ eventId, className }: EventRegister
   };
 
   return (
-    <div className={cn("max-w-[900px] mx-auto", className)}>
+    <div className={cn("max-w-[900px] mx-auto [*_canvas]:mx-auto", className)}>
       <Line data={data} options={getConfig(Math.max(...(groupedStats?.data ?? [])) + 2)} />
     </div>
   );

@@ -9,7 +9,7 @@ export default function Layout({ children }: PropsWithChildren) {
   return (
     <>
       <Header>
-        <Link href="/" className="col-start-1 cursor-pointer">
+        <Link href="/" className="col-start-1 cursor-pointer hidden md:block">
           <Logo />
         </Link>
 

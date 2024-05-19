@@ -11,6 +11,7 @@ import Logo from "@/components/ui/Logo";
 import { eventService } from "@/lib/services/eventService";
 import { notFound } from "next/navigation";
 import { isNumber } from "chart.js/helpers";
+import { Suspense } from "react";
 
 export default async function Page({
   searchParams,
@@ -35,14 +36,14 @@ export default async function Page({
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <div className="bg-brand-300 h-screen grid grid-cols-12 grid-rows-12 gap-2">
-        <Header className="col-start-1 col-end-6 row-span-1 bg-brand-300">
-          <Link href="/" className="col-start-1 cursor-pointer">
+      <div className="bg-brand-300 h-screen md:grid md:grid-cols-12 md:grid-rows-12 md:gap-2">
+        <Header className="md:col-start-1 md:col-end-6 md:row-span-1 bg-brand-300">
+          <Link href="/" className="md:col-start-1 cursor-pointer">
             <Logo />
           </Link>
         </Header>
 
-        <div className="col-start-1 col-end-6 row-start-4 pl-4 pr-4 text-center text-white text-[20px] max-w-[400px] mx-auto">
+        <div className="flex flex-col pt-[100px] pb-[80px] md:col-start-1 md:col-end-6 md:row-start-4 md:pl-4 md:pr-4 text-center text-white text-[20px] max-w-[400px] mx-auto">
           <h1 className="text-center">
             Great choice, mate! You are going to register to the event
             <br />
@@ -55,10 +56,12 @@ export default async function Page({
           <EventCostTile cost={event.cost} />
         </div>
 
-        <RegisterToEventForm
-          eventId={Number(eventID)}
-          className="col-start-6 col-span-full row-span-full"
-        />
+        <Suspense>
+          <RegisterToEventForm
+            eventId={Number(eventID)}
+            className="md:col-start-6 md:col-span-full md:row-span-full mx-4 md:mx-0"
+          />
+        </Suspense>
       </div>
     </HydrationBoundary>
   );

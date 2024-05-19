@@ -21,12 +21,12 @@ export default async function Page({ searchParams }: PageProps<unknown, EventSea
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
       <div className="bg-brand-300">
-        <div className="md:container md:mx-auto">
+        <div className="md:container md:mx-auto px-4">
           <Hero />
         </div>
       </div>
 
-      <div className="md:container mx-auto py-4">
+      <div className="md:container mx-auto py-4 px-4">
         <div className="flex flex-col gap-2 border-b-2 border-gray-200 pb-2">
           <Heading as="h2" className="font-semibold text-alt-100">
             Trending Events around the World

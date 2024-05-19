@@ -16,6 +16,8 @@ import EventRegisterChart from "@/features/Events/EventRegisterChart";
 import EventOrganizerTile from "@/components/EventInfo/EventOrganizerTile";
 import { notFound } from "next/navigation";
 import { isNumber } from "@/lib/type.guards";
+import BackLink from "@/components/BackLink";
+import { Suspense } from "react";
 
 export const revalidate = 300;
 
@@ -63,9 +65,10 @@ export default async function Page({ params: { id } }: PageProps<{ id: string }>
   const { cost, image, organizer, startingAt, title, venue } = event ?? ({} as IEvent);
 
   return (
-    <div className="md:container md:mx-auto py-6">
-      <Heading as="h1" className="mb-2 text-alt-100 text-center">
-        {title}
+    <div className="md:container md:mx-auto py-6 px-4">
+      <Heading as="h1" className="mb-2 text-alt-100 flex px-2">
+        <BackLink className="text-brand-200 justify-self-start" />
+        <span className="flex-grow text-center">{title}</span>
       </Heading>
 
       <div
@@ -89,7 +92,9 @@ export default async function Page({ params: { id } }: PageProps<{ id: string }>
       </div>
 
       <HydrationBoundary state={dehydratedState}>
-        <ParticipantsList eventId={eventId} />
+        <Suspense>
+          <ParticipantsList eventId={eventId} />
+        </Suspense>
       </HydrationBoundary>
 
       <div className="shadow-md py-2 px-4 rounded-lg mt-6">
@@ -103,7 +108,9 @@ export default async function Page({ params: { id } }: PageProps<{ id: string }>
         <EventOrganizerTile organizer={organizer} className="[&_b]:text-gray-900 mb-4" />
 
         <HydrationBoundary state={dehydratedState}>
-          <EventRegisterChart eventId={eventId} />
+          <Suspense>
+            <EventRegisterChart eventId={eventId} />
+          </Suspense>
         </HydrationBoundary>
       </div>
     </div>

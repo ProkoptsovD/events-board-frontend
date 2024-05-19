@@ -1,7 +1,7 @@
 "use client";
 
 import cn from "classnames";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, KeyboardEvent, useState } from "react";
 
 import Input, { InputProps } from "@/components/ui/Input";
 import Button from "@/components/ui/Button";
@@ -35,6 +35,12 @@ export default function SearchInput({
     onSearch?.(value);
   };
 
+  const handleEnterPress = (e: KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      onSearch?.(value);
+    }
+  };
+
   return (
     <span className={cn("flex flex-row", className)}>
       <Input
@@ -42,6 +48,7 @@ export default function SearchInput({
         {...inputProps}
         value={value}
         onChange={handleInputChange}
+        onKeyDown={handleEnterPress}
       />
 
       {
