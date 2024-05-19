@@ -42,6 +42,12 @@ const nextConfig = {
         port: "",
         pathname: "/images/**",
       },
+      {
+        protocol: "https",
+        hostname: "www.w3schools.com",
+        port: "",
+        pathname: "/w3images/**",
+      },
     ],
   },
   async headers() {
