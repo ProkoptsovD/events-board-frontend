@@ -1,9 +1,11 @@
+import { envConfig } from "../../../envConfig";
+
 type BaseOptions = Omit<RequestInit, "method">;
 
 type GETOptions = Omit<BaseOptions, "body">;
 type POSTOptions = BaseOptions;
 
-const API_URL = process.env.NEXT_PUBLIC_SERVER_URL || "http://localhost:3003";
+const API_URL = envConfig.SERVER_URL;
 
 const baseFetch = async <TData = unknown, TError = unknown>(
   url: string,
