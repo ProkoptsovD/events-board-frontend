@@ -1,3 +1,5 @@
+import "react-calendar/dist/Calendar.css";
+
 import cn from "classnames";
 import { MouseEvent } from "react";
 import ReactCalendar, { CalendarProps as ReactCalendarProps } from "react-calendar";
@@ -18,10 +20,12 @@ export default function Calendar({
   className,
   onClose,
   onSubmit,
+  ...restProps
 }: CalendarProps) {
   return (
     <div className={cn("absolute bottom-[4px]", className)}>
       <ReactCalendar
+        {...restProps}
         value={value}
         onChange={onChange}
         locale={locale}

@@ -2,6 +2,7 @@
 
 import dynamic from "next/dynamic";
 import cn from "classnames";
+
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ComponentProps, Suspense } from "react";
@@ -9,16 +10,22 @@ import { FormProvider, useForm } from "react-hook-form";
 import { useMutation } from "@tanstack/react-query";
 
 import { eventService } from "@/lib/services/eventService";
+import { getDateWithYears } from "@/lib/helpers/dates";
+import { birthDate } from "@/lib/validation/fields";
+import { MIN_PARTICIPANT_AGE } from "@/lib/const";
 
 import Field from "@/components/Field";
 import Input from "@/components/ui/Input";
 import Button from "@/components/ui/Button";
 import Spinner from "@/components/ui/Spinner";
 import RadioGroup from "@/components/RadioGroup";
-import DateTimeInput from "@/components/ui/DateTimeInput";
+import DateTimeInput, { DateTimeInputProps } from "@/components/ui/DateTimeInput";
 
 const RegisterToEventSuccessModal = dynamic(
   () => import("@/components/modals/RegisterToEventSuccessModal")
+);
+const RegisterToEventFailedModal = dynamic(
+  () => import("@/components/modals/RegisterToEventFailedModal")
 );
 
 const schema = z.object({
@@ -27,26 +34,32 @@ const schema = z.object({
     .min(3, "Need at least 3 chars")
     .max(255, "Must be less than 255 chars"),
   email: z.string().email(),
-  birthDate: z.date().or(z.string().min(1, "Date of Birth is required")),
+  birthDate,
   eventChannel: z.string().min(1, "The field is required"),
 });
 
+const calendarOptions: DatetimeInputPartialProps["calendarOptions"] = {
+  maxDate: getDateWithYears(MIN_PARTICIPANT_AGE),
+  defaultActiveStartDate: getDateWithYears(MIN_PARTICIPANT_AGE),
+};
+
 type RegisterForEventFormValues = z.infer<typeof schema>;
 type RegisterFormProps = Omit<ComponentProps<"form">, "onSubmit"> & { eventId: number };
+type DatetimeInputPartialProps = Omit<DateTimeInputProps, "ref" | "onChange" | "value">;
 
 export default function RegisterForm({ className, eventId, ...props }: RegisterFormProps) {
   const form = useForm<RegisterForEventFormValues>({
     defaultValues: {
       name: "",
       email: "",
-      birthDate: "",
+      birthDate: getDateWithYears(18),
       eventChannel: "",
     },
     resolver: zodResolver(schema),
   });
-  const { mutateAsync, isPending, isSuccess } = useMutation<
+  const { mutate, reset, isPending, isSuccess, isError, error } = useMutation<
     unknown,
-    unknown,
+    string,
     { eventId: number; participant: CreateEventParticipantDTO }
   >({
     mutationFn: (dto) => eventService.registerToEvent(dto.eventId, dto.participant),
@@ -58,7 +71,7 @@ export default function RegisterForm({ className, eventId, ...props }: RegisterF
       birthDate: new Date(participantData.birthDate),
     };
 
-    await mutateAsync({ eventId, participant });
+    mutate({ eventId, participant });
   };
 
   const needShowSpinner = form.formState.isSubmitting || isPending;
@@ -68,7 +81,7 @@ export default function RegisterForm({ className, eventId, ...props }: RegisterF
       <form
         onSubmit={form.handleSubmit(handleFormSubmit)}
         className={cn(
-          "bg-white rounded-l-[2.5rem]  px-10 pt-[20px] md:pt-[100px] md:px-[80px]",
+          "bg-white rounded-lg md:rounded-none md:rounded-l-[2.5rem] px-10 pt-[20px] pb-[20px] md:pt-[100px] md:px-[80px]",
           className
         )}
         {...props}
@@ -78,11 +91,12 @@ export default function RegisterForm({ className, eventId, ...props }: RegisterF
 
           <Field name="name" label="Full name" placeholder="E.g. John Doe" component={Input} />
           <Field name="email" label="Email" placeholder="example@mail.com" component={Input} />
-          <Field
+          <Field<DatetimeInputPartialProps>
             name="birthDate"
             label="Date of birth"
-            placeholder="Select from calendar..."
+            placeholder="Min age is 18 years old..."
             component={DateTimeInput}
+            calendarOptions={calendarOptions}
           />
 
           <RadioGroup
@@ -99,7 +113,10 @@ export default function RegisterForm({ className, eventId, ...props }: RegisterF
 
       {needShowSpinner && <Spinner backdrop />}
 
-      <Suspense>{isSuccess && <RegisterToEventSuccessModal eventId={eventId} />}</Suspense>
+      <Suspense>
+        {isError && <RegisterToEventFailedModal reason={error} onClose={reset} />}
+        {isSuccess && <RegisterToEventSuccessModal eventId={eventId} />}
+      </Suspense>
     </FormProvider>
   );
 }

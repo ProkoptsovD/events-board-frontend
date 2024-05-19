@@ -1,6 +1,7 @@
 export const DEFAULT_LOCALE = "en-US";
 export const DEFAULT_DATE_FORMAT = "MMM DD, YYYY";
 export const DEFAULT_TIME_FORMAT = "hh:mm A";
+export const MIN_PARTICIPANT_AGE = 18;
 
 export const BG_PATTERNS_CSS_CLASSES = [
   "polka",

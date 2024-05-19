@@ -11,13 +11,13 @@ const baseFetch = async <TData = unknown, TError = unknown>(
 ): Promise<TData | TError> => {
   try {
     const apiUrl = API_URL + url;
-    const response = await fetch(apiUrl);
+    const response = await fetch(apiUrl, options);
     const data = response.json();
 
     return data as TData;
   } catch (error) {
     console.log(error);
-    return error as TError;
+    throw error as TError;
   }
 };
 
@@ -27,8 +27,8 @@ export const httpClient = {
     options?: GETOptions
   ): Promise<APIRequestSuccess<TData> | TError> => {
     const response = await baseFetch<APIRequestSuccess<TData>, TError>(url, {
-      method: "GET",
       ...options,
+      method: "GET",
     });
 
     return response;
@@ -38,8 +38,8 @@ export const httpClient = {
     options?: POSTOptions
   ): Promise<APIRequestSuccess<TData> | TError> => {
     const response = await baseFetch<APIRequestSuccess<TData>, TError>(url, {
-      ...options,
       method: "POST",
+      ...options,
     });
 
     return response;

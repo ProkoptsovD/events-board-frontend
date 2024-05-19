@@ -23,3 +23,7 @@ export const formatTime = (date: Date | string | number, options?: FormatDateTim
 
   return formatDate(date, { locale, format });
 };
+
+export const getDateWithYears = (years: number) => {
+  return dayjs(new Date()).subtract(years, "years").toDate();
+};

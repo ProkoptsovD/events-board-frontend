@@ -33,3 +33,26 @@ export default function RegisterToEventSuccessModal({ eventId }: RegisterToEvent
     </Modal>
   );
 }
+
+export const RegisterToEventSuccessModalSkeleton = () => {
+  return (
+    <Modal>
+      <div className="w-full py-6 px-4 animate-pulse">
+        <div className="h-10 bg-gray-200 rounded-full w-full mb-4"></div>
+        <div className="h-0.5 bg-gray-200 rounded-full w-full mb-4"></div>
+        <div className="h-2 bg-gray-200 rounded-full mb-2.5"></div>
+        <div className="h-2 bg-gray-200 rounded-full w-full mb-2.5"></div>
+        <div className="h-2 bg-gray-200 rounded-full w-full mb-2.5"></div>
+        <div className="h-2 bg-gray-200 rounded-full w-full mb-2.5"></div>
+        <div className="h-2 bg-gray-200 rounded-full w-full mb-2.5"></div>
+        <div className="h-2 bg-gray-200 rounded-full w-full mb-2.5"></div>
+        <div className="h-2 bg-gray-200 rounded-full w-full mb-4"></div>
+
+        <div className="flex justify-center gap-4 mb-3">
+          <div className="h-10 bg-gray-200 rounded-full w-[30%]"></div>
+          <div className="h-10 bg-gray-200 rounded-full w-[30%]"></div>
+        </div>
+      </div>
+    </Modal>
+  );
+};

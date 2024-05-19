@@ -24,13 +24,14 @@ const getEventById = async (id: number) => {
 
     const response = await httpClient.get<IEvent>(url);
 
-    if ("data" in response) {
-      return response.data;
+    if ("message" in response) {
+      throw response.message;
     }
 
-    return;
-  } catch {
-    return null;
+    return response.data;
+  } catch (e) {
+    console.log(e);
+    throw e;
   }
 };
 const getEventParticipants = async (id: number) => {
@@ -57,13 +58,14 @@ const registerToEvent = async (eventId: number, participant: CreateEventParticip
       },
     });
 
-    if ("data" in response) {
-      return response.data;
+    if ("message" in response) {
+      throw response.message;
     }
 
-    return;
-  } catch {
-    return null;
+    return response.data;
+  } catch (e) {
+    console.log(e);
+    throw e;
   }
 };
 const getEventRegistrationStats = async (eventId: number) => {
