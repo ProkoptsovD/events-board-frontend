@@ -34,13 +34,21 @@ export default function EventsList({ className }: PropsWithClassName) {
   const sortBy = searchParams.get("sortBy") || "title";
   const queryText = searchParams.get("q") || "";
 
-  const { data, isSuccess, fetchNextPage, hasNextPage, isFetching, isLoading, isPlaceholderData } =
-    useEventsQuery({
-      page,
-      perPage,
-      sortBy,
-      q: queryText,
-    });
+  const {
+    data,
+    isSuccess,
+    fetchNextPage,
+    hasNextPage,
+    isFetching,
+    isLoading,
+    isPlaceholderData,
+    dataUpdatedAt,
+  } = useEventsQuery({
+    page,
+    perPage,
+    sortBy,
+    q: queryText,
+  });
 
   const lastElementRef = useCallback(
     (node: HTMLLIElement) => {
@@ -79,6 +87,7 @@ export default function EventsList({ className }: PropsWithClassName) {
       <ToTopButton />
 
       <ul
+        key={dataUpdatedAt}
         className={cn(
           "grid grid-cols-1 sm:[&>*]:mx-auto md:grid-cols-2 lg:grid-cols-3 gap-4 py-4",
           className
