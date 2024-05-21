@@ -93,13 +93,13 @@ export default function EventsList({ className }: PropsWithClassName) {
           className
         )}
       >
-        {events?.map((event) => {
+        {events?.map((event, index) => {
           if (isPlaceholderData) {
             return <EventCardSkeleton key={event.id} />;
           }
 
           return (
-            <li key={event.id} ref={lastElementRef}>
+            <li key={event.id + index + new Date(event.startingAt).getTime()} ref={lastElementRef}>
               <EventCard>
                 <EventPoster src={event.image} width={600} height={500} />
 

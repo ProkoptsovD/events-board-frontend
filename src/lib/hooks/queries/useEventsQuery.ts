@@ -5,7 +5,9 @@ export const getUseEventsQueryKeys = ({ page, perPage, sortBy, q }: EventSearchP
   return ["events", { page, perPage, sortBy, q }];
 };
 
-const placeholderData = Array.from({ length: 10 }, (_, i) => ({ id: i })) as IEventPreview[];
+export const eventsPlaceholderData = Array.from({ length: 10 }, (_, i) => ({
+  id: i,
+})) as IEventPreview[];
 
 export const useEventsQuery = ({ page, perPage, sortBy, q }: EventSearchParams) => {
   const events = useInfiniteQuery({
@@ -19,7 +21,7 @@ export const useEventsQuery = ({ page, perPage, sortBy, q }: EventSearchParams) 
     },
     refetchOnWindowFocus: true,
     staleTime: 5000,
-    placeholderData: { pages: [placeholderData], pageParams: [undefined] },
+    placeholderData: { pages: [eventsPlaceholderData], pageParams: [undefined] },
   });
 
   return events;

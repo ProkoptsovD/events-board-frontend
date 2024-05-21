@@ -1,25 +1,16 @@
+import { Suspense } from "react";
+
 import Hero from "@/components/Hero";
 import Heading from "@/components/ui/Heading";
 import EventsList from "@/features/Events/EventsList";
+
 import { SortBy } from "@/features/FastFilters";
-import { getUseEventsQueryKeys } from "@/lib/hooks/queries/useEventsQuery";
-import { eventService } from "@/lib/services/eventService";
-import { dehydrate, HydrationBoundary, QueryClient } from "@tanstack/react-query";
 
 export const revalidate = 300;
 
-export default async function Page({ searchParams }: PageProps<unknown, EventSearchParams>) {
-  const queryClient = new QueryClient();
-
-  const { page = "1", perPage = "10", sortBy, q } = searchParams;
-
-  await queryClient.prefetchQuery({
-    queryKey: getUseEventsQueryKeys({ page, perPage, sortBy, q }),
-    queryFn: () => eventService.getAllEvents({ page, perPage, sortBy }),
-  });
-
+export default async function Page() {
   return (
-    <HydrationBoundary state={dehydrate(queryClient)}>
+    <>
       <div className="bg-brand-300">
         <div className="md:container md:mx-auto px-4">
           <Hero />
@@ -35,8 +26,10 @@ export default async function Page({ searchParams }: PageProps<unknown, EventSea
           <SortBy className="ml-auto [&_label]:font-medium" />
         </div>
 
-        <EventsList />
+        <Suspense>
+          <EventsList />
+        </Suspense>
       </div>
-    </HydrationBoundary>
+    </>
   );
 }
