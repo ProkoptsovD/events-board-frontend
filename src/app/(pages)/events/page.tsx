@@ -8,12 +8,14 @@ import { SortBy } from "@/features/FastFilters";
 
 export const revalidate = 300;
 
-export default async function Page() {
+export default function Page() {
   return (
     <>
       <div className="bg-brand-300">
         <div className="md:container md:mx-auto px-4">
-          <Hero />
+          <Suspense>
+            <Hero />
+          </Suspense>
         </div>
       </div>
 
@@ -23,7 +25,9 @@ export default async function Page() {
             Trending Events around the World
           </Heading>
 
-          <SortBy className="ml-auto [&_label]:font-medium" />
+          <Suspense>
+            <SortBy className="ml-auto [&_label]:font-medium" />
+          </Suspense>
         </div>
 
         <Suspense>
