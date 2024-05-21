@@ -13,7 +13,7 @@ export default function Hero({ className }: PropsWithClassName) {
         Explore a world of events. Find what excites you!
       </h1>
 
-      <EventsSearch />
+      {/* <EventsSearch />  // it's buggy a bit */}
     </div>
   );
 }
